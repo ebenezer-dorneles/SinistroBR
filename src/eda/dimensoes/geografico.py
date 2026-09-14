@@ -1,8 +1,9 @@
 """Fase 2.2 — dimensão geográfica (unidade: acidente).
 
-Rankings por UF, BR e município; concentração por trecho `(br, km)` arredondado
-(insumo dos "pontos negros" da Fase 3); densidade espacial por lat/long; e o
-recorte operacional da PRF (`regional`/`delegacia`/`uop`).
+Rankings por UF, BR e município; concentração por trecho `(uf, br, km)` arredondado
+(insumo dos "pontos negros" da Fase 3; a chave inclui `uf` porque `(br, km)` não é
+única entre estados); densidade espacial por lat/long; e o recorte operacional da
+PRF (`regional`/`delegacia`/`uop`).
 
 **Limitação de denominador:** rankings absolutos medem *volume*, não *risco* — não
 há frota, malha rodoviária nem tráfego neste dataset para normalizar. Um estado
@@ -53,7 +54,7 @@ def ranking_municipio(acidentes: pd.DataFrame, top: int | None = TOP_N) -> pd.Se
 
 
 # --------------------------------------------------------------------------
-# Concentração por trecho (br, km)
+# Concentração por trecho (uf, br, km)
 # --------------------------------------------------------------------------
 def com_trecho(acidentes: pd.DataFrame) -> pd.DataFrame:
     """Adiciona `km_trecho` (km arredondado por `KM_TRECHO_ROUND`) e descarta
@@ -66,14 +67,17 @@ def com_trecho(acidentes: pd.DataFrame) -> pd.DataFrame:
 def concentracao_trecho(
     acidentes: pd.DataFrame, min_acidentes: int = 1, top: int | None = None
 ) -> pd.DataFrame:
-    """Acidentes por trecho `(br, km_trecho)`, ordenado desc.
+    """Acidentes por trecho `(uf, br, km_trecho)`, ordenado desc.
 
+    A chave inclui `uf` porque `(br, km)` não é única entre estados — a mesma BR
+    cruza o país inteiro e o mesmo km se repete em UFs diferentes (devolutiva
+    Fase 3.5 → G6, ver `src/eda/hipoteses/pontos_negros.py`).
     `min_acidentes` filtra trechos com poucos casos; `top` limita a saída.
     Cada linha é um candidato a "ponto negro" para a Fase 3.
     """
     a = com_trecho(acidentes)
     g = (
-        a.groupby(["br", "km_trecho"])
+        a.groupby(["uf", "br", "km_trecho"])
         .size()
         .rename("acidentes")
         .reset_index()
@@ -132,10 +136,10 @@ def gerar_figuras(acidentes: pd.DataFrame, dest: Path = DEST) -> list[Path]:
     ]
 
     tr = concentracao_trecho(acidentes, top=TOP_N)
-    rotulos = tr["br"].astype(str) + " km " + tr["km_trecho"].astype(str)
+    rotulos = tr["uf"] + " " + tr["br"].astype(str) + " km " + tr["km_trecho"].astype(str)
     fig, ax = plt.subplots(figsize=(9, 5))
     ax.barh(rotulos[::-1], tr["acidentes"][::-1], color="#C44E52")
-    ax.set_title(f"Trechos (br, km) com mais acidentes — top {TOP_N}")
+    ax.set_title(f"Trechos (uf, br, km) com mais acidentes — top {TOP_N}")
     ax.set_xlabel("acidentes")
     figuras.append(_salvar(fig, "concentracao_trecho.png", dest))
 

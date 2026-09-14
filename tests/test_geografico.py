@@ -42,7 +42,9 @@ def test_concentracao_trecho_ordenada_e_filtrada(acidentes):
     tr = geografico.concentracao_trecho(acidentes, min_acidentes=20)
     assert (tr["acidentes"] >= 20).all()
     assert tr["acidentes"].is_monotonic_decreasing
-    # o trecho de topo é conhecido: BR-101
+    assert len(tr) == 382  # chave (uf, br, km) — devolutiva Fase 3.5 → G6
+    # o trecho de topo é conhecido: SC, BR-101 km 208
+    assert tr.iloc[0]["uf"] == "SC"
     assert tr.iloc[0]["br"] == 101
 
 

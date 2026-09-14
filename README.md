@@ -116,8 +116,8 @@ por hora pico ao anoitecer e a letalidade à noite/amanhecer.
 ### Fase 2.2 — `src/eda/dimensoes/geografico.py`
 
 `ranking_uf` / `ranking_br` / `ranking_municipio`, `concentracao_trecho` (pontos
-negros por `(br, km)`), `cobertura_operacional`, mapa hexbin de densidade.
-Achados G1–G7 — destaque: BR-101+BR-116 = 33% dos acidentes, 623 trechos
+negros por `(uf, br, km)`), `cobertura_operacional`, mapa hexbin de densidade.
+Achados G1–G7 — destaque: BR-101+BR-116 = 33% dos acidentes, 382 trechos
 concentram ~30% dos casos localizados (insumo da Fase 3), rankings medem volume
 e não risco (sem frota/malha para normalizar).
 

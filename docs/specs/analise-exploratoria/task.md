@@ -72,7 +72,7 @@ Tarefas atômicas da **Fase 1 — ETL**, da **Fase 2 — EDA por dimensão** e d
 - [x] Tabela de corte **"vira gráfico × sem sinal"** — 13 itens que viram gráfico/KPI com a pergunta de negócio; 6 itens que **não** viram recomendação (H7, H8, H15-curva, chuva, interação meteoro×causa, ranking fino dos trechos).
 - [x] Devolutiva para `spec.md` §2.8: nota "Devolutiva pós-Fase 3" com o veredito dos 6 cruzamentos.
 - [x] Devolutiva para `achados-eda.md`: tabela "Resolução dos candidatos F3" (F3-1…F3-9) + correção de G6 (chave `(uf, br, km)`).
-- [x] Devolutiva para a Fase 2.2 (não Fase 1): `concentracao_trecho` em `geografico.py` usa `(br, km)`, que conflita entre UFs — corrigir em tarefa dedicada (quebra asserts de `test_geografico.py`).
+- [x] Devolutiva para a Fase 2.2 (não Fase 1): `concentracao_trecho` em `geografico.py` usava `(br, km)`, que conflita entre UFs. **Corrigido:** chave passou a `(uf, br, km)` (382 trechos, top SC/BR-101/km 208), `test_geografico.py` atualizado.
 - [x] `README.md` (status + comandos) e `plan.md` (§Fase 3 fechada, placar) atualizados.
 
 ## Em Progresso
@@ -117,7 +117,7 @@ _(vazio — Fase 3 fechada. Próxima: Fase 4 — definição do dashboard, `plan
 ### Fase 2.2 — Geográfico (unidade: acidente) — `src/eda/dimensoes/geografico.py`
 - [x] **Devolutiva → Fase 1:** normalizar `br == 0` / `km` sem BR (167 acidentes, localização na malha não identificada) para NaN. — `src/etl/pipeline.py:normalize_br_km_sentinel`. Sem isso `(br=0, km=0)` era o maior "trecho".
 - [x] Rankings por `uf` (27), `br` (114, era 115 com o `0`) e `municipio` (1.844). — `ranking_uf`/`ranking_br`/`ranking_municipio`. BR-101+BR-116 = 33% dos acidentes; top-10 municípios = só 9,7%.
-- [x] Concentração por trecho `(br, km)` arredondado (`const.KM_TRECHO_ROUND`). — `com_trecho`/`concentracao_trecho`. 623 trechos com ≥20 acidentes = 29,5% dos localizados; topo BR-101 km 205–208.
+- [x] Concentração por trecho `(uf, br, km)` arredondado (`const.KM_TRECHO_ROUND`). — `com_trecho`/`concentracao_trecho`. **Atualizado pós-Fase 3 (G6/H17):** chave corrigida de `(br, km)` para `(uf, br, km)` — 382 trechos com ≥20 acidentes; topo SC/BR-101 km 205–208.
 - [x] Mapa de densidade lat/long (hexbin log). — `gerar_figuras` → `densidade_espacial.png`. **Confirmado:** 0 nulos / 0 outliers, cobre 100% (spec §3.4 errado).
 - [x] Documentar limitação de denominador (volume ≠ risco) em `achados-eda.md` (G3–G4).
 - [x] `regional`/`delegacia`/`uop` como recorte operacional. — `cobertura_operacional`. **Decisão:** fora do dashboard principal (redundante com UF/BR; útil só para usuário PRF).

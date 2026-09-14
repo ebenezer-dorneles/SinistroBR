@@ -118,8 +118,9 @@ candidatos a "ponto negro" para a Fase 3 (`concentracao_trecho`).
 > negros" misturavam acidentes de estados diferentes. Com a chave correta
 > `(uf, br, km)` são **382** trechos com ≥ 20 acidentes/ano; o cluster do topo é
 > BR-101 km 205–208 **em SC** (São José, região de Florianópolis), ~300 acidentes.
-> `src/eda/hipoteses/pontos_negros.py` usa a chave corrigida; `concentracao_trecho`
-> em `geografico.py` ainda usa `(br, km)` — corrigir numa tarefa dedicada.
+> `src/eda/hipoteses/pontos_negros.py` já usava a chave corrigida; `concentracao_trecho`
+> em `geografico.py` foi corrigida para `(uf, br, km)` (era `(br, km)`), alinhando
+> a Fase 2.2 com a Fase 3 — figura e teste atualizados.
 
 ### G7 — Recorte operacional PRF (`regional`/`delegacia`/`uop`): fora do dashboard geral
 **Unidade:** acidente. **Veredito:** `sem sinal` novo (decisão de escopo).
