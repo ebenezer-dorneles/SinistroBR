@@ -1,0 +1,7 @@
+# Fase 1 (ETL) + Fase 2 (EDA). Versões testadas em Python 3.14.
+pandas>=2.2,<4
+pyarrow>=15          # persistência parquet (src/etl/pipeline.py:persist)
+matplotlib>=3.8      # visualização da EDA (decisão da Fase 2.0, ver plan.md)
+
+# desenvolvimento
+pytest>=8
